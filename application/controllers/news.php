@@ -31,6 +31,35 @@ class News extends CI_Controller {
         $this->load->view('templates/footer');
     }
 
+    public function create()
+    {
+        //load form helper
+        $this->load->helper('form');
+        //load form validation library
+        $this->load->library('form_validation');
+
+        $data['title'] = 'Create a news item';
+        //set_rules() method takes three arguments; the name of the input field, the name to be used in error messages, and the rule
+        $this->form_validation->set_rules('title', 'Title', 'required');
+        $this->form_validation->set_rules('text', 'text', 'required');
+        //check the form validated successfully
+        if ($this->form_validation->run() === FALSE)
+        {
+            //if not display the form
+            $this->load->view('templates/header', $data);
+            $this->load->view('news/create');
+            $this->load->view('templates/footer');
+
+        }
+        else
+        {
+            //if it validated the new_model is called
+            $this->news_model->set_news();
+            //and a view is loaded to display a success message
+            $this->load->view('news/success');
+        }
+    }
+
 }
 
-?>
+
